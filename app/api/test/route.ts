@@ -21,14 +21,15 @@ export async function GET() {
       connected: true,
       message: "MongoDB Connected Successfully",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Mongo Error:", error);
+    const message = error instanceof Error ? error.message : "Unknown database error";
 
     return NextResponse.json(
       {
         success: false,
         connected: false,
-        error: error.message,
+        error: message,
         fullError: String(error),
       },
       { status: 200 }

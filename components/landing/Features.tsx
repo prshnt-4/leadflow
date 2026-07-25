@@ -1,6 +1,6 @@
 import { ArrowUpRight, Lock, Search, Sparkles, Users, Zap } from "lucide-react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SectionHeading } from "@/components/landing/SectionHeading";
 
 const features = [
@@ -49,13 +49,13 @@ export function Features() {
         {features.map((feature) => {
           const Icon = feature.icon;
           return (
-            <Card key={feature.title} className="border-slate-200/80 bg-white/80 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+            <Card key={feature.title} className="border-slate-800 bg-slate-900/50 text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(34,211,238,0.1)] hover:border-cyan-500/30">
               <CardHeader>
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-400">
                   <Icon className="h-5 w-5" />
                 </div>
-                <CardTitle>{feature.title}</CardTitle>
-                <CardDescription>{feature.description}</CardDescription>
+                <CardTitle className="text-white">{feature.title}</CardTitle>
+                <CardDescription className="text-slate-400">{feature.description}</CardDescription>
               </CardHeader>
             </Card>
           );

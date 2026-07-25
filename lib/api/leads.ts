@@ -1,14 +1,18 @@
-export async function getLeads() {
-  const response = await fetch("/api/leads");
+import type { Lead, LeadInput } from "@/components/crm/types";
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch leads");
-  }
-
-  return response.json();
+async function parseResponse<T>(response: Response): Promise<T> {
+  const result = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(result?.message || "Request failed. Please try again.");
+  return result as T;
 }
 
-export async function createLead(data: unknown) {
+export async function getLeads(): Promise<{ success: boolean; data: Lead[] }> {
+  const response = await fetch("/api/leads");
+
+  return parseResponse(response);
+}
+
+export async function createLead(data: LeadInput) {
   const response = await fetch("/api/leads", {
     method: "POST",
     headers: {
@@ -17,16 +21,10 @@ export async function createLead(data: unknown) {
     body: JSON.stringify(data),
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to create lead");
-  }
-
-  return result;
+  return parseResponse(response);
 }
 
-export async function updateLead(id: string, data: unknown) {
+export async function updateLead(id: string, data: LeadInput) {
   const response = await fetch(`/api/leads/${id}`, {
     method: "PUT",
     headers: {
@@ -35,13 +33,7 @@ export async function updateLead(id: string, data: unknown) {
     body: JSON.stringify(data),
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to update lead");
-  }
-
-  return result;
+  return parseResponse(response);
 }
 
 export async function deleteLead(id: string) {
@@ -49,11 +41,5 @@ export async function deleteLead(id: string) {
     method: "DELETE",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to delete lead");
-  }
-
-  return result;
+  return parseResponse(response);
 }

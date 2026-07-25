@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function SettingsPage() {
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-4xl space-y-6">
       <Card className="border-slate-800 bg-slate-900/80 text-white">
         <CardHeader>
           <CardTitle>Workspace Settings</CardTitle>

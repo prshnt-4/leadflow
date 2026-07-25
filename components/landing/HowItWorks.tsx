@@ -34,19 +34,19 @@ export function HowItWorks() {
         {steps.map((step, index) => {
           const Icon = step.icon;
           return (
-            <Card key={step.title} className="relative overflow-hidden border-slate-200/80 bg-white/80">
+            <Card key={step.title} className="relative overflow-hidden border-slate-800 bg-slate-900/50">
               <CardContent className="p-8">
                 <div className="flex items-center justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-800 text-white">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <span className="text-sm font-semibold text-slate-400">0{index + 1}</span>
+                  <span className="text-sm font-semibold text-slate-500">0{index + 1}</span>
                 </div>
-                <h3 className="mt-6 text-xl font-semibold text-slate-950">{step.title}</h3>
-                <p className="mt-3 text-base leading-7 text-slate-600">{step.description}</p>
+                <h3 className="mt-6 text-xl font-semibold text-white">{step.title}</h3>
+                <p className="mt-3 text-base leading-7 text-slate-400">{step.description}</p>
                 {index < steps.length - 1 ? (
                   <div className="mt-6 hidden lg:flex">
-                    <ArrowRight className="h-5 w-5 text-slate-400" />
+                    <ArrowRight className="h-5 w-5 text-slate-600" />
                   </div>
                 ) : null}
               </CardContent>

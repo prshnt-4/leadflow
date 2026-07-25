@@ -1,42 +1,25 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/db";
-import Lead from "@/models/lead";
+import { requireSession } from "@/lib/auth/require-session";
+import { getDashboardStats } from "@/lib/dashboard";
 
 export async function GET() {
   try {
-    await connectDB();
-
-    const totalLeads = await Lead.countDocuments();
-
-    const newLeads = await Lead.countDocuments({ status: "New" });
-    const contacted = await Lead.countDocuments({ status: "Contacted" });
-    const qualified = await Lead.countDocuments({ status: "Qualified" });
-    const proposal = await Lead.countDocuments({ status: "Proposal" });
-    const won = await Lead.countDocuments({ status: "Won" });
-    const lost = await Lead.countDocuments({ status: "Lost" });
+    if (!(await requireSession())) return NextResponse.json({ success: false, message: "Not authenticated." }, { status: 401 });
+    const data = await getDashboardStats();
 
     return NextResponse.json({
       success: true,
-      data: {
-        totalLeads,
-        newLeads,
-        contacted,
-        qualified,
-        proposal,
-        won,
-        lost,
-      },
+      data,
     });
- } catch (error) {
-  console.error("Dashboard API Error:", error);
+  } catch (error) {
+    console.error("Dashboard API Error:", error);
 
-  return NextResponse.json(
-    {
-      success: false,
-      error: error instanceof Error ? error.message : String(error),
-    },
-    { status: 500 }
-  );
+    return NextResponse.json(
+      {
+        success: false,
+          message: "Unable to load dashboard data.",
+      },
+      { status: 500 }
+    );
+  }
 }
-}
-

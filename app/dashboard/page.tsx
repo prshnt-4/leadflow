@@ -1,26 +1,12 @@
+export const dynamic = "force-dynamic";
+
 import { LeadStats } from "@/components/crm/LeadStats";
 import { RecentLeadsTable } from "@/components/crm/RecentLeadsTable";
-import { getDashboardStats } from "@/lib/api/dashboard";
-
-async function getLeads() {
-    try {
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
-
-        const res = await fetch(`${baseUrl}/api/leads`, {
-            cache: "no-store",
-        });
-
-        const data = await res.json();
-        return data.data || [];
-    } catch (error) {
-        console.error("Failed to fetch leads:", error);
-        return [];
-    }
-}
+import { getDashboardStats } from "@/lib/dashboard";
+import LeadStatusChart from "@/components/crm/LeadStatusChart";
+import MonthlyLeadChart from "@/components/crm/MonthlyLeadChart";
 
 export default async function DashboardPage() {
-    const leads = await getLeads();
-
     const stats = await getDashboardStats();
 
     return (
@@ -49,16 +35,23 @@ export default async function DashboardPage() {
                 </div>
             </section>
 
-            <LeadStats
+            <div className="grid gap-6">
+              <LeadStats
                 total={stats.totalLeads}
                 newLeads={stats.newLeads}
                 contacted={stats.contacted}
                 qualified={stats.qualified}
                 won={stats.won}
                 lost={stats.lost}
-            />
+              />
+            </div>
 
-            <RecentLeadsTable leads={leads.slice(0, 5)} />
+            <div className="grid gap-6 lg:grid-cols-2 items-stretch">
+              <LeadStatusChart stats={stats} />
+              <MonthlyLeadChart data={stats.monthlyLeads} />
+            </div>
+
+            <RecentLeadsTable />
         </div>
     );
 }

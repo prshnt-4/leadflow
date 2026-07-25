@@ -48,14 +48,14 @@ export function LeadStats({
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {stats.map((stat) => (
         <Card
           key={stat.label}
-          className="border-slate-800/70 bg-slate-900/80 text-white hover:border-cyan-500 transition-all"
+          className="group border-slate-800/70 bg-slate-900/80 text-white shadow-[0_4px_20px_rgba(2,8,23,0.1)] transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/50 hover:shadow-[0_10px_30px_rgba(34,211,238,0.15)]"
         >
           <CardContent className="p-5">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-400 transition-colors group-hover:text-cyan-100/70">
               {stat.label}
             </p>
 
@@ -64,7 +64,7 @@ export function LeadStats({
                 {stat.value}
               </p>
 
-              <span className="rounded-full bg-cyan-500/10 p-2 text-cyan-400">
+              <span className="rounded-full bg-cyan-500/10 p-2 text-cyan-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500/20 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]">
                 <ArrowUpRight className="h-4 w-4" />
               </span>
             </div>

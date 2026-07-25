@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+import { attachSessionCookie } from "@/lib/auth/cookies";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "@/lib/auth/validation";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 
@@ -12,12 +18,15 @@ export async function POST(request: Request) {
     // Read request body
     const { name, email, password } = await request.json();
 
-    // Validate input
-    if (!name || !email || !password) {
+    const nameError = validateName(name ?? "");
+    const emailError = validateEmail(email ?? "");
+    const passwordError = validatePassword(password ?? "");
+
+    if (nameError || emailError || passwordError) {
       return NextResponse.json(
         {
           success: false,
-          message: "All fields are required.",
+          message: nameError ?? emailError ?? passwordError,
         },
         { status: 400 }
       );
@@ -48,7 +57,7 @@ export async function POST(request: Request) {
       password: hashedPassword,
     });
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         message: "Account created successfully.",
@@ -60,6 +69,12 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
+
+    return attachSessionCookie(response, {
+      id: String(user._id),
+      name: user.name,
+      email: user.email,
+    });
   } catch (error) {
     console.error(error);
 

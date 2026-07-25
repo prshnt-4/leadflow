@@ -1,67 +1,195 @@
-import Link from "next/link";
+"use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+
+import { AuthAlert } from "@/components/auth/AuthAlert";
+import { AuthLayout } from "@/components/auth/AuthLayout";
+import { LoadingSpinner } from "@/components/auth/LoadingSpinner";
+import { PasswordInput } from "@/components/auth/PasswordInput";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  getFirstError,
+  validateSignupForm,
+  type FieldErrors,
+} from "@/lib/auth/validation";
 
 export default function SignupPage() {
+  const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  const handleSignup = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const validationErrors = validateSignupForm(name, email, password);
+    setFieldErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      setError(getFirstError(validationErrors));
+      setSuccess("");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Signup failed. Please try again.");
+        return;
+      }
+
+      setSuccess(data.message || "Account created. Redirecting...");
+      router.push("/dashboard");
+      router.refresh();
+    } catch {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12 text-white">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-800 via-slate-900 to-indigo-950" />
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
-          backgroundSize: "72px 72px",
-          opacity: 0.18,
-        }}
-      />
-      <div className="pointer-events-none absolute -left-24 top-12 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-1/4 h-96 w-96 rounded-full bg-violet-500/15 blur-3xl" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-60 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent blur-3xl" />
-
-      <Link href="/dashboard" className="absolute left-4 top-4 z-20 rounded-full border border-white/10 bg-white/8 px-4 py-3 backdrop-blur-xl shadow-lg shadow-slate-950/10 sm:left-8 sm:top-8">
-        <div className="flex items-center gap-3 text-sm font-semibold text-white">
-          <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-base shadow-lg shadow-indigo-500/20">L</span>
-          <span>LeadFlow</span>
-        </div>
-      </Link>
-
+    <AuthLayout>
       <Card className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-white/8 shadow-[0_25px_80px_rgba(99,102,241,0.18)] backdrop-blur-xl transition-transform duration-700 ease-out hover:-translate-y-0.5 animate-fade-in-up">
         <div className="absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.18),transparent_38%)]" />
-        <CardHeader className="relative z-10 space-y-4 px-8 pt-12">
-          <CardTitle className="text-5xl font-bold tracking-tight text-white">Create your account</CardTitle>
+        <CardHeader className="relative z-10 space-y-4 px-6 pt-12 sm:px-8">
+          <CardTitle className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            Create your account
+          </CardTitle>
           <CardDescription className="max-w-xs text-base text-slate-300">
             Start working smarter with LeadFlow CRM.
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="relative z-10 space-y-5 px-8 pb-8 pt-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-200">Full Name</label>
-            <Input placeholder="Taylor Brooks" className="h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white placeholder:text-slate-500 focus:border-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500/40" />
-          </div>
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-200">Email</label>
-            <Input placeholder="you@example.com" className="h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white placeholder:text-slate-500 focus:border-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500/40" />
-          </div>
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-200">Password</label>
-            <Input type="password" placeholder="••••••••" className="h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white placeholder:text-slate-500 focus:border-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500/40" />
-          </div>
-          <Button className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-3 text-base font-semibold text-white shadow-lg shadow-violet-500/20 transition duration-300 ease-out hover:from-indigo-400 hover:to-violet-400 hover:scale-[1.01]">
-            Create account
-          </Button>
+        <CardContent className="relative z-10 space-y-5 px-6 pb-8 pt-2 sm:px-8">
+          <form onSubmit={handleSignup} className="space-y-5" noValidate>
+            <div>
+              <label
+                htmlFor="name"
+                className="mb-2 block text-sm font-medium text-slate-200"
+              >
+                Full Name
+              </label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Taylor Brooks"
+                autoComplete="name"
+                disabled={loading}
+                aria-invalid={Boolean(fieldErrors.name)}
+                aria-describedby={fieldErrors.name ? "name-error" : undefined}
+                className="h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white placeholder:text-slate-500 focus:border-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+              />
+              {fieldErrors.name ? (
+                <p id="name-error" className="mt-1.5 text-sm text-red-400">
+                  {fieldErrors.name}
+                </p>
+              ) : null}
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium text-slate-200"
+              >
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="you@example.com"
+                autoComplete="email"
+                disabled={loading}
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={
+                  fieldErrors.email ? "email-error" : undefined
+                }
+                className="h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white placeholder:text-slate-500 focus:border-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+              />
+              {fieldErrors.email ? (
+                <p id="email-error" className="mt-1.5 text-sm text-red-400">
+                  {fieldErrors.email}
+                </p>
+              ) : null}
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-slate-200"
+              >
+                Password
+              </label>
+              <PasswordInput
+                id="password"
+                value={password}
+                onChange={setPassword}
+                error={fieldErrors.password}
+                disabled={loading}
+                autoComplete="new-password"
+                placeholder="At least 8 characters"
+              />
+            </div>
+
+            <AuthAlert variant="error" message={error} />
+            <AuthAlert variant="success" message={success} />
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-3 text-base font-semibold text-white shadow-lg shadow-violet-500/20 transition-all duration-300 ease-out hover:scale-[1.02] hover:from-indigo-400 hover:to-violet-400 hover:shadow-indigo-500/30 active:scale-95 disabled:opacity-70"
+            >
+              {loading ? (
+                <LoadingSpinner label="Creating account..." />
+              ) : (
+                "Create account"
+              )}
+            </Button>
+          </form>
         </CardContent>
 
         <CardFooter className="relative z-10 flex flex-col items-center justify-center gap-2 border-t border-white/10 bg-white/5 px-8 py-6 text-center text-sm text-slate-300 sm:flex-row sm:justify-between">
           <p className="text-slate-300/90">Already have an account?</p>
-          <Link href="/login" className="font-semibold text-indigo-400 transition-colors duration-200 hover:text-indigo-200">
+          <Link
+            href="/login"
+            className="font-semibold text-indigo-400 transition-colors duration-200 hover:text-indigo-200"
+          >
             Sign in
           </Link>
         </CardFooter>
       </Card>
-    </main>
+    </AuthLayout>
   );
 }

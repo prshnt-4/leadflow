@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, LayoutGrid, Settings, Users } from "lucide-react";
+import { BarChart3, LayoutGrid, Settings, Users, X } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const items = [
@@ -12,7 +14,12 @@ const items = [
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  mobileOpen: boolean;
+  onClose: () => void;
+}
+
+export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname() || "/";
 
   const getActive = (href: string) => {
@@ -22,8 +29,16 @@ export function Sidebar() {
     return pathname === href;
   };
 
-  return (
-    <aside className="hidden w-72 shrink-0 border-r border-slate-800/80 bg-[linear-gradient(180deg,rgba(2,6,23,0.98),rgba(8,15,32,0.94))] p-6 lg:flex lg:flex-col">
+  useEffect(() => {
+    if (!mobileOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  const sidebarContent = (
+    <div className="flex h-full flex-col">
       <div className="flex items-center gap-3">
         <Link href="/dashboard" className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.15)]">
@@ -51,6 +66,7 @@ export function Sidebar() {
                   ? "bg-cyan-500/12 text-cyan-300 shadow-[inset_0_0_0_1px_rgba(34,211,238,0.14)]"
                   : "text-slate-400 hover:bg-slate-900/90 hover:text-slate-100"
               )}
+              onClick={onClose}
             >
               <Icon className="h-4 w-4" />
               {item.label}
@@ -63,6 +79,38 @@ export function Sidebar() {
         <p className="text-sm font-medium text-white">Need more visibility?</p>
         <p className="mt-1 text-sm text-slate-400">Track every motion in one place.</p>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      <aside className="hidden w-72 shrink-0 border-r border-slate-800/80 bg-[linear-gradient(180deg,rgba(2,6,23,0.98),rgba(8,15,32,0.94))] p-6 lg:flex lg:flex-col">
+        {sidebarContent}
+      </aside>
+
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={onClose} />
+          <div className="relative z-10 flex w-[min(80vw,320px)] flex-col border-r border-slate-800/80 bg-[linear-gradient(180deg,rgba(2,6,23,0.98),rgba(8,15,32,0.94))] p-6 shadow-2xl">
+            <div className="mb-8 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.15)]">
+                  <BarChart3 className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-white">LeadFlow</p>
+                  <p className="text-sm text-slate-400">CRM workspace</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="icon" className="text-slate-300" onClick={onClose}>
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            {sidebarContent}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

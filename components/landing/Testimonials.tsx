@@ -33,16 +33,16 @@ export function Testimonials() {
       />
       <div className="mt-12 grid gap-6 lg:grid-cols-3">
         {testimonials.map((testimonial) => (
-          <Card key={testimonial.name} className="border-slate-200/80 bg-slate-50/80 shadow-sm">
+          <Card key={testimonial.name} className="border-slate-800 bg-slate-900/60 shadow-sm transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/80">
             <CardHeader>
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-sm font-semibold text-cyan-400">
                 {testimonial.name.split(" ").map((part) => part[0]).join("")}
               </div>
-              <CardTitle>{testimonial.name}</CardTitle>
-              <CardDescription>{testimonial.role}</CardDescription>
+              <CardTitle className="text-white">{testimonial.name}</CardTitle>
+              <CardDescription className="text-slate-500">{testimonial.role}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-base leading-7 text-slate-600">“{testimonial.quote}”</p>
+              <p className="text-base leading-7 text-slate-300">“{testimonial.quote}”</p>
             </CardContent>
           </Card>
         ))}

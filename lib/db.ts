@@ -28,11 +28,24 @@ export async function connectDB() {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      dbName: "leadflow",
-    });
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        dbName: "leadflow",
+        serverSelectionTimeoutMS: 10000,
+      })
+      .catch((error: unknown) => {
+        // Do not cache a rejected connection: a temporary network error should
+        // be recoverable by the next request.
+        cached.promise = null;
+        throw error;
+      });
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (error) {
+    cached.conn = null;
+    throw error;
+  }
 }

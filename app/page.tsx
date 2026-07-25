@@ -5,20 +5,20 @@ import { Footer } from "@/components/landing/Footer";
 import { Hero } from "@/components/landing/Hero";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Navbar } from "@/components/landing/Navbar";
-import { Pricing } from "@/components/landing/Pricing";
 import { Testimonials } from "@/components/landing/Testimonials";
-import { TrustedBy } from "@/components/landing/TrustedBy";
+import { Statistics } from "@/components/landing/Statistics";
+import { FAQ } from "@/components/landing/FAQ";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(15,23,42,0.04),_transparent_32%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] text-slate-950">
+    <main className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500/30">
       <Navbar />
       <Hero />
-      <TrustedBy />
       <Features />
+      <Statistics />
       <HowItWorks />
       <Testimonials />
-      <Pricing />
+      <FAQ />
       <CTA />
       <Contact />
       <Footer />

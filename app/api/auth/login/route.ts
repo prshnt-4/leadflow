@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+import { attachSessionCookie } from "@/lib/auth/cookies";
+import { validateEmail, validatePassword } from "@/lib/auth/validation";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 
@@ -8,13 +10,19 @@ export async function POST(request: Request) {
   try {
     await connectDB();
 
-    const { email, password } = await request.json();
+    const { email, password, rememberMe = false } = await request.json();
 
-    if (!email || !password) {
+    const emailError = validateEmail(email ?? "");
+    const passwordError = validatePassword(password ?? "", {
+      minLength: 1,
+      label: "Password",
+    });
+
+    if (emailError || passwordError) {
       return NextResponse.json(
         {
           success: false,
-          message: "Email and password are required.",
+          message: emailError ?? passwordError,
         },
         { status: 400 }
       );
@@ -49,7 +57,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         message: "Login successful.",
@@ -60,6 +68,16 @@ export async function POST(request: Request) {
         },
       },
       { status: 200 }
+    );
+
+    return attachSessionCookie(
+      response,
+      {
+        id: String(user._id),
+        name: user.name,
+        email: user.email,
+      },
+      Boolean(rememberMe)
     );
   } catch (error) {
     console.error(error);

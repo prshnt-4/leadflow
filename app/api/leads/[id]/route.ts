@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Lead from "@/models/lead";
+import { requireSession } from "@/lib/auth/require-session";
+import { isValidLeadId, validateLeadInput } from "@/lib/leads/validation";
 
 interface RouteParams {
   params: Promise<{
@@ -16,9 +18,11 @@ export async function GET(
   { params }: RouteParams
 ) {
   try {
+    if (!(await requireSession())) return NextResponse.json({ success: false, message: "Not authenticated." }, { status: 401 });
     await connectDB();
 
     const { id } = await params;
+    if (!isValidLeadId(id)) return NextResponse.json({ success: false, message: "Invalid lead ID." }, { status: 400 });
 
     const lead = await Lead.findById(id);
 
@@ -57,45 +61,17 @@ export async function PUT(
   { params }: RouteParams
 ) {
   try {
+    if (!(await requireSession())) return NextResponse.json({ success: false, message: "Not authenticated." }, { status: 401 });
     await connectDB();
 
     const { id } = await params;
-
-    const body = await request.json();
-
-    const {
-      name,
-      email,
-      phone,
-      company,
-      status,
-      source,
-      notes,
-      assignedTo,
-    } = body;
-
-    if (!name || !email || !phone || !company) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Required fields are missing",
-        },
-        { status: 400 }
-      );
-    }
+    if (!isValidLeadId(id)) return NextResponse.json({ success: false, message: "Invalid lead ID." }, { status: 400 });
+    const validation = validateLeadInput(await request.json());
+    if (!validation.data) return NextResponse.json({ success: false, message: validation.message }, { status: 400 });
 
     const updatedLead = await Lead.findByIdAndUpdate(
       id,
-      {
-        name,
-        email,
-        phone,
-        company,
-        status,
-        source,
-        notes,
-        assignedTo,
-      },
+      validation.data,
       {
         new: true,
         runValidators: true,
@@ -138,9 +114,11 @@ export async function DELETE(
   { params }: RouteParams
 ) {
   try {
+    if (!(await requireSession())) return NextResponse.json({ success: false, message: "Not authenticated." }, { status: 401 });
     await connectDB();
 
     const { id } = await params;
+    if (!isValidLeadId(id)) return NextResponse.json({ success: false, message: "Invalid lead ID." }, { status: 400 });
 
     const deletedLead = await Lead.findByIdAndDelete(id);
 
