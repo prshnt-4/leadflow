@@ -32,6 +32,7 @@ export async function connectDB() {
       .connect(MONGODB_URI, {
         dbName: "leadflow",
         serverSelectionTimeoutMS: 10000,
+        maxPoolSize: 5,
       })
       .catch((error: unknown) => {
         // Do not cache a rejected connection: a temporary network error should

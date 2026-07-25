@@ -24,7 +24,7 @@ export async function GET(
     const { id } = await params;
     if (!isValidLeadId(id)) return NextResponse.json({ success: false, message: "Invalid lead ID." }, { status: 400 });
 
-    const lead = await Lead.findById(id);
+    const lead = await Lead.findById(id).lean();
 
     if (!lead) {
       return NextResponse.json(

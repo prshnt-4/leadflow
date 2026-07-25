@@ -9,7 +9,7 @@ export async function GET() {
     if (!(await requireSession())) return NextResponse.json({ success: false, message: "Not authenticated." }, { status: 401 });
     await connectDB();
 
-    const leads = await Lead.find().sort({ createdAt: -1 });
+    const leads = await Lead.find().sort({ createdAt: -1 }).lean();
 
     return NextResponse.json({
       success: true,

@@ -14,12 +14,31 @@ export type DashboardStats = {
 
 export async function getDashboardStats(): Promise<DashboardStats> {
   await connectDB();
-  const [totalLeads, newLeads, contacted, qualified, proposal, won, lost, monthlyData] = await Promise.all([
-    Lead.countDocuments(), Lead.countDocuments({ status: "New" }), Lead.countDocuments({ status: "Contacted" }),
-    Lead.countDocuments({ status: "Qualified" }), Lead.countDocuments({ status: "Proposal" }),
-    Lead.countDocuments({ status: "Won" }), Lead.countDocuments({ status: "Lost" }),
-    Lead.aggregate([{ $group: { _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } }, leads: { $sum: 1 } } }, { $sort: { "_id.year": 1, "_id.month": 1 } }]),
+  const [analytics] = await Lead.aggregate<{
+    statusCounts: { _id: string; count: number }[];
+    monthlyData: { _id: { month: number }; leads: number }[];
+  }>([
+    {
+      $facet: {
+        statusCounts: [{ $group: { _id: "$status", count: { $sum: 1 } } }],
+        monthlyData: [
+          { $group: { _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } }, leads: { $sum: 1 } } },
+          { $sort: { "_id.year": 1, "_id.month": 1 } },
+        ],
+      },
+    },
   ]);
+  const counts = new Map(analytics?.statusCounts.map((item) => [item._id, item.count]));
+  const totalLeads = [...counts.values()].reduce((total, count) => total + count, 0);
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return { totalLeads, newLeads, contacted, qualified, proposal, won, lost, monthlyLeads: monthlyData.map((item) => ({ month: monthNames[item._id.month - 1], leads: item.leads })) };
+  return {
+    totalLeads,
+    newLeads: counts.get("New") ?? 0,
+    contacted: counts.get("Contacted") ?? 0,
+    qualified: counts.get("Qualified") ?? 0,
+    proposal: counts.get("Proposal") ?? 0,
+    won: counts.get("Won") ?? 0,
+    lost: counts.get("Lost") ?? 0,
+    monthlyLeads: (analytics?.monthlyData ?? []).map((item) => ({ month: monthNames[item._id.month - 1], leads: item.leads })),
+  };
 }

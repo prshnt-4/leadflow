@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
@@ -16,13 +17,17 @@ export function CTA() {
           Bring structure to your pipeline and gain the confidence to focus on the deals that matter most.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row relative z-10">
-          <Button size="lg" className="rounded-full bg-cyan-500 text-slate-950 hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 px-8">
-            Start Free
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="lg" className="rounded-full border-slate-700 bg-slate-800/50 text-white hover:bg-slate-800 px-8">
-            Book a Demo
-          </Button>
+          <Link href="/signup" className="w-full sm:w-auto">
+            <Button size="lg" className="w-full rounded-full bg-cyan-500 px-8 text-slate-950 hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 sm:w-auto">
+              Start Free
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+          <Link href="#contact" className="w-full sm:w-auto">
+            <Button variant="outline" size="lg" className="w-full rounded-full border-slate-700 bg-slate-900 px-8 text-white hover:bg-slate-800 sm:w-auto">
+              Book a Demo
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

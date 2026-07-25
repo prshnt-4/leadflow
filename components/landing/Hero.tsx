@@ -1,4 +1,5 @@
 import { ArrowRight, PlayCircle } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,14 +19,18 @@ export function Hero() {
           LeadFlow helps startups and businesses organize, track, and manage customer leads effortlessly.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button size="lg" className="rounded-full bg-cyan-500 text-slate-950 hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 px-6">
-            Get Started
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="lg" className="rounded-full border-slate-700 text-white hover:bg-slate-800 px-6">
-            <PlayCircle className="mr-2 h-4 w-4" />
-            Live Demo
-          </Button>
+          <Link href="/signup" className="w-full sm:w-auto">
+            <Button size="lg" className="w-full rounded-full bg-cyan-500 px-6 text-slate-950 hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 sm:w-auto">
+              Get Started
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+          <Link href="#contact" className="w-full sm:w-auto">
+            <Button variant="outline" size="lg" className="w-full rounded-full border-slate-700 bg-slate-900 px-6 text-white hover:bg-slate-800 sm:w-auto">
+              <PlayCircle className="mr-2 h-4 w-4" />
+              Live Demo
+            </Button>
+          </Link>
         </div>
         <div className="mt-10 flex flex-wrap gap-4 text-sm text-slate-400">
           <div className="rounded-full border border-slate-800 bg-slate-900/50 px-3 py-2">No credit card required</div>
