@@ -8,8 +8,8 @@ A modern, full-stack Customer Relationship Management (CRM) application built wi
 
 ## 🌐 Live Demo
 
-- **Live Application:** https://YOUR-VERCEL-URL.vercel.app
-- **GitHub Repository:** https://github.com/YOUR_USERNAME/LeadFlow
+- **Live Application:** [https://YOUR-VERCEL-URL.vercel.app](https://leadflow-sable-kappa.vercel.app/)
+- **GitHub Repository:** https://github.com/prshnt-4/LeadFlow
 
 ---
 
