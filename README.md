@@ -19,7 +19,7 @@ Email: prshnt@test.com
 
 Password: 12345678
 
-*(Replace these with your actual test credentials before submission.)*
+
 
 ---
 
