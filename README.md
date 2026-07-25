@@ -15,9 +15,9 @@ A modern, full-stack Customer Relationship Management (CRM) application built wi
 
 ## 🔑 Test Credentials
 
-Email: demo@leadflow.com
+Email: prshnt@test.com
 
-Password: Demo@123
+Password: 12345678
 
 *(Replace these with your actual test credentials before submission.)*
 
@@ -206,13 +206,6 @@ npm install
 
 Create a `.env.local` file
 
-```env
-MONGODB_URI=your_mongodb_uri
-
-NEXTAUTH_SECRET=your_secret
-
-NEXTAUTH_URL=http://localhost:3000
-```
 
 Run the development server
 
@@ -238,18 +231,7 @@ The database is hosted on **MongoDB Atlas**.
 
 ---
 
-# 📸 Screenshots
 
-Add screenshots of:
-
-- Landing Page
-- Login
-- Dashboard
-- Add Lead
-- Analytics
-- Mobile View
-
----
 
 # 🔒 Security
 
