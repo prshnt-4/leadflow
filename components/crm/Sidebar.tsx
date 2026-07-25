@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { BarChart3, LayoutGrid, Settings, Users } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -9,23 +12,34 @@ const items = [
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
-export function Sidebar({ active = "/dashboard" }: { active?: string }) {
+export function Sidebar() {
+  const pathname = usePathname() || "/";
+
+  const getActive = (href: string) => {
+    if (href === "/dashboard") return pathname === "/dashboard";
+    if (href.endsWith("/leads")) return pathname === "/leads" || pathname.endsWith("/leads");
+    if (href.endsWith("/settings")) return pathname === "/settings" || pathname.endsWith("/settings");
+    return pathname === href;
+  };
+
   return (
     <aside className="hidden w-72 shrink-0 border-r border-slate-800/80 bg-[linear-gradient(180deg,rgba(2,6,23,0.98),rgba(8,15,32,0.94))] p-6 lg:flex lg:flex-col">
       <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.15)]">
-          <BarChart3 className="h-5 w-5" />
-        </div>
-        <div>
-          <p className="text-lg font-semibold text-white">LeadFlow</p>
-          <p className="text-sm text-slate-400">CRM workspace</p>
-        </div>
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.15)]">
+            <BarChart3 className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-lg font-semibold text-white">LeadFlow</p>
+            <p className="text-sm text-slate-400">CRM workspace</p>
+          </div>
+        </Link>
       </div>
 
       <nav className="mt-10 space-y-2">
         {items.map((item) => {
           const Icon = item.icon;
-          const isActive = active === item.href;
+          const isActive = getActive(item.href);
 
           return (
             <Link

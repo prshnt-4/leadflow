@@ -64,12 +64,12 @@ export default function LoginPage() {
             <div className="pointer-events-none absolute right-0 top-1/4 h-96 w-96 rounded-full bg-violet-500/15 blur-3xl" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-60 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent blur-3xl" />
 
-            <div className="absolute left-4 top-4 z-20 rounded-full border border-white/10 bg-white/8 px-4 py-3 backdrop-blur-xl shadow-lg shadow-slate-950/10 sm:left-8 sm:top-8">
+            <Link href="/dashboard" className="absolute left-4 top-4 z-20 rounded-full border border-white/10 bg-white/8 px-4 py-3 backdrop-blur-xl shadow-lg shadow-slate-950/10 sm:left-8 sm:top-8">
                 <div className="flex items-center gap-3 text-sm font-semibold text-white">
                     <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-base shadow-lg shadow-indigo-500/20">L</span>
                     <span>LeadFlow</span>
                 </div>
-            </div>
+            </Link>
 
             <Card className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-white/8 shadow-[0_25px_80px_rgba(99,102,241,0.18)] backdrop-blur-xl transition-transform duration-700 ease-out hover:-translate-y-0.5 animate-fade-in-up">
                 <div className="absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.18),transparent_38%)]" />

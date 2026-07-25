@@ -1,8 +1,12 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Bell, Search, Settings2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +17,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function Topbar() {
+  const router = useRouter();
+
+  const signOut = async () => {
+    try {
+      // Attempt server logout if available
+      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+    } catch (e) {
+      // ignore
+    }
+
+    // Clear any client-side storage
+    try {
+      localStorage.removeItem("token");
+    } catch (e) {}
+
+    router.push("/login");
+  };
+
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 bg-slate-950/85 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
       <div className="flex items-center gap-3">
@@ -28,11 +50,17 @@ export function Topbar() {
       <div className="flex flex-1 items-center gap-3 lg:max-w-xl">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <Input placeholder="Search leads or contacts" className="h-10 rounded-2xl border-slate-800 bg-slate-900/80 pl-9 text-sm text-slate-100 shadow-inner" />
+          <Input
+            placeholder="Global search (coming soon)"
+            disabled
+            title="Global search is not enabled yet"
+            className="h-10 rounded-2xl border-slate-800 bg-slate-900/80 pl-9 text-sm text-slate-100 shadow-inner opacity-80"
+          />
         </div>
         <Button variant="outline" size="icon" className="border-slate-800 bg-slate-900 text-slate-100 hover:bg-slate-800">
           <Bell className="h-4 w-4" />
         </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="rounded-full p-1">
@@ -41,12 +69,14 @@ export function Topbar() {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Sign out</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => (window.location.href = "/dashboard/profile")}>Profile</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => (window.location.href = "/dashboard/settings")}>Settings</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={signOut}>Sign out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

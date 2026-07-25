@@ -5,54 +5,67 @@ import { Card, CardContent } from "@/components/ui/card";
 
 interface LeadStatsProps {
   total: number;
+  newLeads: number;
+  contacted: number;
   qualified: number;
   won: number;
+  lost: number;
 }
 
 export function LeadStats({
   total,
+  newLeads,
+  contacted,
   qualified,
   won,
+  lost,
 }: LeadStatsProps) {
   const stats = [
     {
-      label: "Open Leads",
+      label: "Total Leads",
       value: total,
-      trend: "+100%",
+    },
+    {
+      label: "New Leads",
+      value: newLeads,
+    },
+    {
+      label: "Contacted",
+      value: contacted,
     },
     {
       label: "Qualified",
       value: qualified,
-      trend: "+100%",
     },
     {
       label: "Won",
       value: won,
-      trend: "+100%",
     },
     {
-      label: "Avg. Deal",
-      value: "₹0",
-      trend: "0%",
+      label: "Lost",
+      value: lost,
     },
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {stats.map((stat) => (
         <Card
           key={stat.label}
-          className="border-slate-800/70 bg-slate-900/80 text-white"
+          className="border-slate-800/70 bg-slate-900/80 text-white hover:border-cyan-500 transition-all"
         >
           <CardContent className="p-5">
-            <p className="text-sm text-slate-400">{stat.label}</p>
+            <p className="text-sm text-slate-400">
+              {stat.label}
+            </p>
 
-            <div className="mt-3 flex items-end justify-between">
-              <p className="text-2xl font-semibold">{stat.value}</p>
+            <div className="mt-3 flex items-center justify-between">
+              <p className="text-3xl font-bold">
+                {stat.value}
+              </p>
 
-              <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-sm text-emerald-400">
-                <ArrowUpRight className="h-3.5 w-3.5" />
-                {stat.trend}
+              <span className="rounded-full bg-cyan-500/10 p-2 text-cyan-400">
+                <ArrowUpRight className="h-4 w-4" />
               </span>
             </div>
           </CardContent>
