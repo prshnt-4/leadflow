@@ -1,40 +1,297 @@
-# LeadFlow
+# 🚀 LeadFlow CRM
 
-A modern Lead Management Platform built with Next.js, TypeScript, MongoDB, and Auth.js.
+A modern, full-stack Customer Relationship Management (CRM) application built with **Next.js 15**, **TypeScript**, **MongoDB Atlas**, and **Tailwind CSS**. LeadFlow helps businesses efficiently manage leads through a clean dashboard, secure authentication, and an intuitive user experience.
 
-## Tech Stack
+> Built for the **Digital Heroes Internship Qualification Task**
 
-- Next.js 16
-- React 19
+---
+
+## 🌐 Live Demo
+
+- **Live Application:** https://YOUR-VERCEL-URL.vercel.app
+- **GitHub Repository:** https://github.com/YOUR_USERNAME/LeadFlow
+
+---
+
+## 🔑 Test Credentials
+
+Email: demo@leadflow.com
+
+Password: Demo@123
+
+*(Replace these with your actual test credentials before submission.)*
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication
+- Secure user registration
+- Login with email and password
+- Password hashing using bcrypt
+- Protected dashboard routes
+- Session-based authentication
+
+---
+
+## 📊 Dashboard
+
+- Total Leads
+- Lead Status Overview
+- Monthly Analytics
+- Responsive Charts
+- Real-time Statistics
+
+---
+
+## 👥 Lead Management
+
+- Create Lead
+- View Leads
+- Update Lead
+- Delete Lead
+- Search Leads
+- Filter by Status
+
+---
+
+## 📈 Analytics
+
+- Pie Chart for Lead Distribution
+- Monthly Lead Creation Chart
+- Dynamic Dashboard Metrics
+
+---
+
+## 📱 Responsive Design
+
+- Desktop
+- Tablet
+- Mobile
+
+---
+
+# 🛠 Tech Stack
+
+## Frontend
+
+- Next.js 15
+- React
 - TypeScript
-- Tailwind CSS v4
+- Tailwind CSS
 - shadcn/ui
-- MongoDB Atlas
+
+## Backend
+
+- Next.js API Routes
+- Node.js
 - Mongoose
-- Auth.js
-- Framer Motion
 
-## Features
+## Database
 
-- Modern SaaS Landing Page
-- Lead Capture Form
-- Secure Authentication
-- Dashboard
-- Lead Management
-- Search & Filter
-- Responsive Design
+- MongoDB Atlas
 
-## Getting Started
+## Deployment
+
+- Vercel
+
+---
+
+# 📂 Project Structure
+
+```
+LeadFlow/
+│
+├── app/
+│   ├── api/
+│   ├── dashboard/
+│   ├── login/
+│   └── signup/
+│
+├── components/
+│
+├── lib/
+│
+├── models/
+│
+├── types/
+│
+└── public/
+```
+
+---
+
+# 🗄 Database Models
+
+## User
+
+| Field | Type |
+|--------|------|
+| Name | String |
+| Email | String |
+| Password | Hashed String |
+
+---
+
+## Lead
+
+| Field | Type |
+|--------|------|
+| Name | String |
+| Email | String |
+| Phone | String |
+| Company | String |
+| Status | New / Contacted / Qualified / Proposal / Won / Lost |
+| Source | Website / LinkedIn / Referral / Cold Call / Other |
+| Assigned To | String |
+| Notes | String |
+| Created At | Date |
+
+---
+
+# 🔐 Authentication Flow
+
+1. User signs up.
+2. Password is securely hashed using bcrypt.
+3. User logs in using email and password.
+4. Credentials are validated against MongoDB.
+5. A secure session is created.
+6. Protected routes are accessible only to authenticated users.
+
+---
+
+# 📡 API Endpoints
+
+## Authentication
+
+POST `/api/auth/signup`
+
+POST `/api/auth/login`
+
+POST `/api/auth/logout`
+
+---
+
+## Leads
+
+GET `/api/leads`
+
+POST `/api/leads`
+
+PUT `/api/leads/:id`
+
+DELETE `/api/leads/:id`
+
+---
+
+## Dashboard
+
+GET `/api/dashboard`
+
+---
+
+# ⚙️ Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/LeadFlow.git
+```
+
+Install dependencies
 
 ```bash
 npm install
+```
+
+Create a `.env.local` file
+
+```env
+MONGODB_URI=your_mongodb_uri
+
+NEXTAUTH_SECRET=your_secret
+
+NEXTAUTH_URL=http://localhost:3000
+```
+
+Run the development server
+
+```bash
 npm run dev
 ```
 
-Visit:
+Build for production
 
-http://localhost:3000
+```bash
+npm run build
 
-## Project Status
+npm start
+```
 
-🚧 Currently under development.
+---
+
+# 🚀 Deployment
+
+The application is deployed using **Vercel**.
+
+The database is hosted on **MongoDB Atlas**.
+
+---
+
+# 📸 Screenshots
+
+Add screenshots of:
+
+- Landing Page
+- Login
+- Dashboard
+- Add Lead
+- Analytics
+- Mobile View
+
+---
+
+# 🔒 Security
+
+- Password Hashing (bcrypt)
+- Environment Variables
+- Protected Routes
+- Secure Authentication
+- MongoDB Atlas Cloud Database
+
+---
+
+# 🎯 Future Improvements
+
+- Role-Based Access Control
+- Email Notifications
+- Activity Timeline
+- Team Collaboration
+- CSV Import & Export
+- Dark Mode
+- AI Lead Scoring
+- Real-Time Notifications
+
+---
+
+# 👨‍💻 Developed By
+
+**Prashant Kumar**
+
+B.Tech, Energy Engineering
+
+Indian Institute of Technology Roorkee (IIT Roorkee)
+
+---
+
+# 📄 License
+
+This project was developed for the **Digital Heroes Internship Qualification Task**.
+
+---
+
+## ❤️ Credit
+
+**Built for Digital Heroes Training Task**
+
+https://digitalheroesco.com
