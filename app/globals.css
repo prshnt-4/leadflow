@@ -122,9 +122,13 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    background-image: radial-gradient(circle at top left, rgba(34,211,238,0.12), transparent 24%), linear-gradient(135deg, #020617 0%, #0f172a 100%);
   }
   html {
     @apply font-sans;
+  }
+  ::selection {
+    @apply bg-cyan-500/30 text-white;
   }
 }
